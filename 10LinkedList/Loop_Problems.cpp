@@ -31,7 +31,6 @@ Node* ArrayToDLL(vector<int> nums) {
 }
 void traversal(Node* head) {
     Node* temp = head;
-
     while(temp) {
         cout << temp->data << " ";
         temp=temp->next;
@@ -93,6 +92,41 @@ Node* startLoop_Optimal(Node* head) {
     }
     return nullptr;
 }
+int LoopLength_BF(Node* head) { // tc->O(n),sc->O(n)
+    Node* temp=head;
+    int c=0;
+    unordered_map<Node*,int>mp;
+    while(temp) {
+        if(mp.find(temp)==mp.end()) { // not present
+            c++;
+            mp[temp]=c;
+        } else {
+            // move c to one more
+            return (c+1)-mp[temp];
+        }
+        temp=temp->next;
+    }
+    return 0;
+}
+int LoopLength_Optimal(Node* head) { // O(N + L)
+    Node*slow=head;
+    Node*fast=head;
+    while(fast && fast->next) {
+        fast=fast->next->next;
+        slow=slow->next;
+        if(slow==fast) {
+            Node* temp = slow->next;
+            int c = 1; // for counting skipped node
+            while(temp != slow) {
+                c++;
+                temp = temp->next;
+            }
+            return c;
+        }
+    }
+    return 0;
+}
+
 
 int main() {
     Node* head = new Node(1,nullptr);
@@ -110,4 +144,6 @@ int main() {
     cout << "Loop present(Optimal): " << checkLoop_Optimal(head) << endl;
     cout << "Starting point of Loop(BF): " << startLoop(head)->data << endl;
     cout << "Starting point of Loop(Optimal): " << startLoop_Optimal(head)->data << endl;
+    cout << "Length of Loop(BF): " << LoopLength_BF(head) << endl;
+    cout << "Length of Loop(Optimal): " << LoopLength_Optimal(head) << endl;
 }
