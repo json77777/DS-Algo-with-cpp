@@ -99,6 +99,47 @@ Node* reverseLL_Recursive(Node* head) {
     head->next=nullptr;
     return newHead;
 }
+bool isPalindrome_BF(Node* head) { // sc,tc -> O(n)
+    Node* temp=head;
+    stack<int> sp;
+    while(temp) {
+        sp.push(temp->data);
+        temp=temp->next;
+    }
+    temp=head;
+    while(temp && !sp.empty()) {
+        if(sp.top()==temp->data) {
+            sp.pop();
+            temp=temp->next;
+        }
+        else return false;
+    }
+    return true;
+}
+bool isPalondrome_Optimal(Node* head) { // sc - O(1), tc - O(n)
+    Node* slow=head;
+    Node* fast=head;
+
+    while(fast && fast->next) {
+        slow=slow->next;
+        fast=fast->next->next;
+    }
+
+    // slow is at mid, reverse after mid
+    Node* second=reverseLL_Recursive(slow);
+    // re-initialize;
+    fast=head;
+
+    while(second) {
+        if(second->data==fast->data) {
+            second=second->next;
+            fast=fast->next;
+        }
+        else return false;
+    }
+    return true;
+}
+
 
 int main() {
     vector<int> nums = {12,2,3,4,5};
@@ -114,4 +155,6 @@ int main() {
     Traversal(head);
     head = reverseLL_Recursive(head);
     Traversal(head);
+    cout << "CheckPalindrome(BF): " << isPalindrome_BF(head) << endl;
+    cout << "CheckPalindrome(Optimal): " << isPalondrome_Optimal(head) << endl;
 }
