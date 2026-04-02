@@ -152,6 +152,36 @@ void oddEvenList_Optimal(Node* head) { // sc->O(1), tc -> o(n);
     }
     odd->next=evenHead;
 }
+void deleteHead(Node*&head) {
+    Node* temp=head;
+    head=head->next;
+    delete temp;
+}
+void removeNthFromEnd(Node*& head, int n) {
+    if(!head) return;
+    Node* fast=head;
+    // move fast upto n
+    while(fast && n) {
+        fast=fast->next;
+        n--;
+    }
+    // edge case
+    if(!fast)  {
+        return deleteHead(head);
+    }
+    if(n) return;
+    // move slow
+    Node* slow=head;
+    while(fast->next) {
+        slow=slow->next;
+        fast=fast->next;
+    }
+    // delete the slow->next pointer
+    Node* temp=slow->next;
+    slow->next=temp->next;
+    delete temp;
+}
+
 
 int main() {
     vector<int> nums = {12,2,3,4,5};
@@ -167,8 +197,12 @@ int main() {
     Traversal(head);
     head = reverseLL_Recursive(head);
     Traversal(head);
-    cout << "CheckPalindrome(BF): " << isPalindrome_BF(head) << endl;
-    cout << "CheckPalindrome(Optimal): " << isPalondrome_Optimal(head) << endl;
+    // cout << "CheckPalindrome(BF): " << isPalindrome_BF(head) << endl;
+    // cout << "CheckPalindrome(Optimal): " << isPalondrome_Optimal(head) << endl;
     oddEvenList_Optimal(head);
+    Traversal(head);
+    deleteHead(head);
+    Traversal(head);
+    removeNthFromEnd(head,3);
     Traversal(head);
 }
