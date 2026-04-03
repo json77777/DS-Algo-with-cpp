@@ -182,7 +182,7 @@ void removeNthFromEnd(Node*& head, int n) {
     delete temp;
 }
 void removeMidNode(Node* head) {
-    if(head || head->next) {
+    if(!head || !head->next) {
         return deleteHead(head);
     } 
     Node* slow=head;
