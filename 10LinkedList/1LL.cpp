@@ -182,7 +182,9 @@ void removeNthFromEnd(Node*& head, int n) {
     delete temp;
 }
 void removeMidNode(Node* head) {
-    if(!head) return;
+    if(head || head->next) {
+        return deleteHead(head);
+    } 
     Node* slow=head;
     Node* fast=head;
     Node* temp=NULL;
@@ -195,6 +197,7 @@ void removeMidNode(Node* head) {
     temp->next=slow->next;
     free(slow);
 }
+
 
 int main() {
     vector<int> nums = {12,2,3,4,5};
