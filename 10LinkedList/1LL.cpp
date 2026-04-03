@@ -181,7 +181,20 @@ void removeNthFromEnd(Node*& head, int n) {
     slow->next=temp->next;
     delete temp;
 }
+void removeMidNode(Node* head) {
+    if(!head) return;
+    Node* slow=head;
+    Node* fast=head;
+    Node* temp=NULL;
 
+    while(fast && fast->next) {
+        temp=slow;
+        slow=slow->next;
+        fast=fast->next->next;
+    }
+    temp->next=slow->next;
+    free(slow);
+}
 
 int main() {
     vector<int> nums = {12,2,3,4,5};
@@ -204,5 +217,7 @@ int main() {
     deleteHead(head);
     Traversal(head);
     removeNthFromEnd(head,3);
+    Traversal(head);
+    removeMidNode(head);
     Traversal(head);
 }
