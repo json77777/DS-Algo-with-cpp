@@ -99,12 +99,52 @@ void MergeSortLL(Node*&head) {
     MergeSortLL(secondHead);
     head = Merge(firstHead,secondHead);
 }
+void sort012(Node* &head) {
+
+    if(!head || !head->next) {
+        return;
+    }
+
+    Node* zeroHead=new Node(-1);
+    Node* zero=zeroHead;
+    Node* oneHead=new Node(-1);
+    Node* one=oneHead;
+    Node* twoHead=new Node(-1);
+    Node* two=twoHead;
+
+    Node* temp=head;
+    while(temp) {
+        if(temp->data==0) {
+            zero->next=temp;
+            zero = temp;
+        }
+        else if(temp->data==1) {
+            one->next=temp;
+            one = temp;
+        }
+        else if(temp->data==2) {
+            two->next=temp;
+            two = temp;
+        }
+        temp=temp->next;
+    }
+    //remove -1 form all
+    zeroHead=zeroHead->next;
+    oneHead=oneHead->next;
+    twoHead=twoHead->next;
+    // links them
+    zero->next=oneHead;
+    one->next=twoHead;
+    two->next=nullptr;
+    head=zeroHead;
+}
 
 int main() {
-    vector<int> nums = {12,2,3,4,5};
+    vector<int> nums = {0,2,1,0,1,1,2,0,0,2,1,2,0};
     Node* head = ArrayToLinkedList(nums);
     Traversal(head);  
-    MergeSortLL(head); 
+    // MergeSortLL(head); 
+    sort012(head);
     Traversal(head);
 
 }
