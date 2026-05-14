@@ -87,6 +87,6 @@ int main() {
     countSetBits(15);
     countSetBits_second(15);
     // built in setbit count
-    cout << __popcount(15) << endl;
+    cout << (15) << endl;
     
 }
