@@ -1,6 +1,7 @@
 #include<bits/stdc++.h>
 using namespace std;
 
+// to check if the end is reachable
 bool canJump(vector<int>& nums) {
     int maxInd=0;
     for(int i=0; i<nums.size(); i++) {
