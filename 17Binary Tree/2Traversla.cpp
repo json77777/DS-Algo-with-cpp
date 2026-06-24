@@ -69,6 +69,41 @@ void inorder(Node* root, vector<int>&ans) {
     inorder(root->right, ans);
 }
 
+void postorder(Node* root, vector<int>&ans) {
+    if(!root) return;
+    postorder(root->left, ans);
+    postorder(root->right, ans);
+    ans.push_back(root->val);
+}
+
+void IterativePostorder(Node* root, vector<int> &ans) {
+    if(!root) return;
+    stack<Node*> s1, s2;
+
+    //push root elm to s1
+    s1.push(root);
+    while(!s1.empty()) {
+        Node* top = s1.top();
+        s1.pop();
+        s2.push(top);
+        if(top->left) s1.push(top->left);
+        if(top->right) s1.push(top->right);
+    }
+    // s2 has ans. push it to ans;
+    while(!s2.empty()) {
+        ans.push_back(s2.top()->val);
+        s2.pop();
+    }
+}   
+
+vector<vector<int>> levelOrder(Node* root) {
+    vector<vector<int>> ans;
+    queue<Node*> q;
+    
+    
+    
+}
+
 int main() {
     // tree build
     vector<optional<int>> nums = {1,2,3,4,5,nullopt,8,nullopt,nullopt,6,7,9};
@@ -76,10 +111,12 @@ int main() {
     
     vector<int> ans;
     // preorder(root, ans);
-    inorder(root, ans);
+    // inorder(root, ans);
+    // postorder(root,ans);
 
+    IterativePostorder(root,ans);
     // print
-    cout << "pre-order traversal: ";
+    cout << "iterative post-order traversal: ";
     for(auto i: ans) {
         cout << i << " ";
     }cout << endl;
