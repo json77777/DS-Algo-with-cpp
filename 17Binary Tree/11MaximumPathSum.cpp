@@ -1,6 +1,6 @@
 #include<bits/stdc++.h>
-// #include "optional.hpp"
-#include<optional>
+#include "optional.hpp"
+// #include<optional>
 using namespace std;
 
 class Node {
@@ -56,17 +56,24 @@ Node* constructTree(const vector<optional<int>>& nums) {
     return root;
 }
 
+// explaination
+// https://excalidraw.com/#json=Oz4z16oc1m5WSzTV344OX,cZyyRoTCIMPCmWti9NZ2yA
 
 int calcPath(Node* root, int &best) {
     if(!root) return 0;
     int l =calcPath(root->left, best);
     int r =calcPath(root->right, best);
+    // ignore negetive paths
+    l = max(l,0);
+    r = max(r,0);
     best = max(best, root->val+best);
-    return ;
+    return root->val + max(l,r);
 }
 
 int maxPathSum(Node* root) {
-    return calcPath(root);
+    int best=0;
+    calcPath(root, best);
+    return best;
 }
 
 int main() {
@@ -79,3 +86,4 @@ int main() {
     cout << "diameter of the tree " << calcPath(root,best); 
 
 }
+    

@@ -56,48 +56,29 @@ Node* constructTree(const vector<optional<int>>& nums) {
     return root;
 }
 
+// explaination
+// https://excalidraw.com/#json=bDWmOs9V5kPEhW8NpgOtu,2WsWLcxXoQ-BnTLa-tSj0A
 
-int height(Node* root) {
-    if(!root) return 0;
-    // right height
-    int l = height(root->left);
-    // left height
-    int r = height(root->right);
+bool isSameTree(Node* p, Node* q) {
+    if(!p && !q) return true;
+    if((!p && q) || (p && !q)) return false;
+    if(p->val != q->val) return false;
 
-    return 1+max(l,r);
+    bool l = isSameTree(p->left,q->left);
+    bool r = isSameTree(p->right,q->right);
+
+    return l && r;
 }
 
-// BF -> O(n*n)
-int diameter(Node*root) {
-    if(!root) return 0;
-    // left height
-    int l = height(root->left);
-    
-    // right height
-    int r = height(root->right);
-    return max(l+r,diameter(root->left)+diameter(root->right)); // diameter
-}
-
-// Better -> O(N)
-int calcDiameter(Node* root,int &best) {
-    if(!root) return 0;
-
-    int l=calcDiameter(root->left, best);
-    int r=calcDiameter(root->right, best);
-    best = max(best, l+r);
-    return 1+max(l,r);
-}
 
 int main() {
     // tree build
     vector<optional<int>> nums = {1,2,3,4,5};
+    vector<optional<int>> nums2 = {1,2,3,4,5};
     Node* root = constructTree(nums);
+    Node* root2 = constructTree(nums2);
     
-    // cout << "diameter of the tree " << diameter(root); 
-    
-    // beter
-    int best=0;
-    calcDiameter(root,best);
-    cout << "diameter of the tree " << calcDiameter(root,best); 
+    cout << "Is same tree? " << isSameTree(root,root2) << endl; 
 
 }
+    
