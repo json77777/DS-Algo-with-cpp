@@ -101,8 +101,13 @@ void rightTraversal(Node* root, vector<int>&ans) {
 }
 
 vector<int> boundaryTraversal(Node*root) {
-    vector<int> l,leaf,r ;
-    leftTraversal(root,l);
+    if(!root) return {};
+		// code here
+    vector<int> l, leaf, r ;
+    if (root->left || root->right)   // don't double-count a single-node tree
+        l.push_back(root->val);
+    
+    leftTraversal(root->left,l);
     leafTraversal(root,leaf);
     rightTraversal(root->right,r);
     l.insert(l.end(),leaf.begin(),leaf.end());
