@@ -58,31 +58,57 @@ Node* constructTree(const vector<optional<int>>& nums) {
     return root;
 }
 
-int childrenSum(Node* root) {
-    if(!root) return 0;
-    if(root) return root->val;
-    int l=childrenSum(root->left);
-    int r=childrenSum(root->right);
+// increment
+void increment(Node* root, int diff) {
+    if(!root) return;
+    if(root->left) {
+        root->left->val+=diff;
+        increment(root->left, diff);
+    }
+    if(root->right) {
+        root->right->val+=diff;
+        increment(root->right, diff);
+    }
+}
 
-    // returned from children
-    if(left && right) {
-        if(l+r > root->val) {
-            root->val=l+r;
-        } else {
-            // change any childs value
-            root->left->val = root->val - root->right->val;
+void childrenSum(Node* root) {
+    if(!root || (!root->left && !root->right)) return ; // leaf; do nothing
+
+    childrenSum(root->left);
+    childrenSum(root->right);
+
+    int leftData  = root->left  ? root->left->val  : 0;
+    int rightData = root->right ? root->right->val: 0;
+
+    int sum = leftData+rightData;
+
+    // parent has small sum
+    if(sum >= root->val) {
+        root->val = sum;        
+    } else {
+        // parent has large sum
+        int diff = root->val - sum;
+        if(root->left) {
+            root->left->val += diff;
+            increment(root->left, diff); // affect its left sub tree with += diff
+        }
+        else if(root->right) {
+            root->right->val += diff;
+            increment(root->right, diff); // affect its right sub tree with += diff
         }
     }
-    if(!left || !right) {
-        if(!left) {
-            if(l > root->val) root->val=l;
-            else root->left->val = root->val;
-        }
-        else {
-            if(r > root->val) root->val=r;
-            else root->right->val = root->val;
-        }k
-    }
+}
+
+bool childSum2(Node* root) {
+    if(!root || (!root->left && !root->right)) return true;
+    bool l = childSum2(root->left);
+    bool r = childSum2(root->right);
+
+    int leftData  = root->left  ? root->left->val  : 0;
+    int rightData = root->right ? root->right->val: 0;
+
+    if(l && r && root->val == leftData+rightData) return true;
+    return false;
 }
 
 int main() {
@@ -93,5 +119,6 @@ int main() {
     
     childrenSum(root);
 
+    cout << "is valid ? " << childSum2(root) << endl;
     
 }
