@@ -1,8 +1,6 @@
-// brute -> compute level orfer and return the max size of level
-
 #include<bits/stdc++.h>
 // #include "optional.hpp"
-#include<optional>
+#include <optional>
 using namespace std;
 
 class Node {
@@ -58,47 +56,36 @@ Node* constructTree(const vector<optional<int>>& nums) {
     return root;
 }
 
-// traverse from target
-void dfs(Node* root, int k, vector<int> &ans, int d, unordered_map<Node*, Node*> &parent, unordered_map<Node*,bool> &visited) {
-    if(!root || visited[root]) return; 
-    // increase distance & store the curr value in visited
-    visited[root]=1;
-    // check if reached distance
-    if(d==k) {
-        ans.push_back(root->val);
-        return;
-    }
-    dfs(root->left,k,ans,d+1,parent,visited);
-    dfs(root->right,k,ans,d+1,parent,visited);
-    dfs(parent[root],k,ans,d+1,parent,visited);
-}   
-
-vector<int> distanceK(Node* root, Node* target, int k) {
-    // fist find the parent Nodes map
-    unordered_map<Node*, Node*> parent;
-    queue<Node*> q; q.push(root);parent[root]=nullptr;
-    while(!q.empty()) {
-        auto top = q.front();
-        q.pop();
-        // map the ans;
-        if(top->left) {
-            parent[top->left]=top;
-            q.push(top->left);
-        }
-        if(top->right) {
-            parent[top->right]=top;
-            q.push(top->right);
-        }
-    }   
-
-    // parent map is ready
-    // traverse the parent map
+vector<int> morrisPreorder(Node* root){
+    Node* curr = root;
     vector<int> ans;
-    unordered_map<Node*,bool> visited;
-    dfs(target,k,ans,0,parent,visited); // 0 -> 0 distance
 
+    while(curr) {
+        if(!curr->left) {
+            ans.push_back(curr->val);
+            curr=curr->right;
+        }
+        else {
+            Node* prev = curr->left;
+            while(prev->right && prev->right != curr) {
+                prev=prev->right;
+            }
+            // create link
+            if(prev->right == nullptr) {
+                prev->right = curr;
+                ans.push_back(curr->val); // mark it when you have reached the root
+                curr = curr->left;
+            }
+            // delete link
+            else {
+                prev->right=nullptr;
+                curr = curr->right;
+            }   
+        }
+    }
     return ans;
 }
+
 
 int main() {
     // tree build
@@ -106,11 +93,13 @@ int main() {
     vector<optional<int>> nums = {3,5,1,6,2,0,8,nullopt,nullopt,7,4};
     Node* root = constructTree(nums);
 
-    vector<int> ans = distanceK(root,root->left, 2);
-
+    // serialize
+    vector<int> ans = morrisPreorder(root);
+    cout << "morris preorder: ";
     for(auto i:ans) {
         cout << i << " ";
     } cout << endl;
+   
 
     
 }

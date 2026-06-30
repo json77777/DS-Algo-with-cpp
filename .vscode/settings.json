@@ -1,0 +1,6 @@
+{
+    "code-runner.runInTerminal": true,
+    "code-runner.executorMap": {
+        "cpp": "cd $dir && /opt/homebrew/bin/g++-16 -std=c++17 \"$fileName\" -o \"$fileNameWithoutExt.exe\" && \"./$fileNameWithoutExt.exe\""
+    }
+}
