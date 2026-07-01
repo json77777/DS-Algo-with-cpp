@@ -1,6 +1,5 @@
 #include<bits/stdc++.h>
 #include "optional.hpp"
-// #include <optional>
 using namespace std;
 
 class Node {
@@ -90,29 +89,43 @@ vector<vector<int>> levelOrder(Node* root) {
     return ans;
 }
 
-void insertNode(Node* &root ,int val) {
+Node* largest(Node* root) {
+    if(!root) return nullptr;
+    if(root->right) return largest(root->right);
+    return root;
+}
+
+Node* deleteNode(Node* &root ,int val) {
     if(!root) {
-        root = new Node(val);
-        return;
+       return nullptr;
     }
     
-    if (val < root->val) {
-        insertNode(root->left, val);
-    } else if (val > root->val) {
-        insertNode(root->right, val);
-    }
+    root->left = deleteNode(root->left,val);
+    root->right=deleteNode(root->right,val);
 
+    if(root->val == val) {
+        // simple check
+        if(!root->left) return root->right;
+        if(!root->right) return root->left;
+        // delete the right link 
+
+        // attach the left subtrees greater with right;
+        Node* leftMax = largest(root->left);
+        leftMax->right = root->right;
+        return root->left;
+    }   
+    else return root;
 }
 
 
 int main() {
     // tree build
 
-    vector<optional<int>> nums = {10,5,15,2,6};
+    vector<optional<int>> nums = {5,3,6,2,4,nullopt,7};
     Node* root = constructTree(nums);
-
-    insertNode(root,9);
-
+    int key = 3;
+    
+    root = deleteNode(root,key);
     vector<vector<int>> ans = levelOrder(root);
 
     for(auto i:ans) {
