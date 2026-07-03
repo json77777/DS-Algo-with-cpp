@@ -32,6 +32,33 @@ vector<int> bfs(vector<vector<int>> &adj) {
     return ans;
 }
 
+vector<int> bfs_iterator(vector<vector<int>> &adj) {
+    vector<int> ans;
+    vector<bool> visited(adj.size(),false);
+
+    queue<int> q;
+    q.push(1);
+
+    for(int i=1; i<visited.size(); i++) {
+        
+        while(!q.empty()) {
+            auto front = q.front();
+            q.pop();
+
+            if(visited[front]) continue;
+
+            visited[front] = true;
+            ans.push_back(front);
+            
+            for(auto ng : adj[front]) {
+                q.push(ng);
+            }
+        }
+    }
+
+    return ans;
+}
+
 int main() {
     auto start = high_resolution_clock::now();
 
@@ -46,7 +73,8 @@ int main() {
         adj[u].push_back(v);
     }
 
-    vector<int> ans = bfs(adj);
+    // vector<int> ans = bfs(adj);
+    vector<int> ans = bfs_iterator(adj);
     for(auto it:ans) {
         cout << it << " ";
     } cout << endl;
@@ -58,3 +86,12 @@ int main() {
 
     return 0;
 }
+/*
+5 6
+1 2
+1 3
+2 4
+3 4 
+3 5 
+4 5
+*/
