@@ -5,7 +5,6 @@ using namespace chrono;
 
 void DFS(vector<vector<int>>& adj, vector<int> &ans, vector<bool>&visited, int i) {
     ans.push_back(i);
-    
     for(auto ng:adj[i]) {
         if(!visited[ng]) {
             visited[ng]=true;
@@ -13,6 +12,7 @@ void DFS(vector<vector<int>>& adj, vector<int> &ans, vector<bool>&visited, int i
         }    
     }
 }
+
 vector<int> dfs(vector<vector<int>>& adj) {
     // Code here
     vector<int> ans;
@@ -42,6 +42,11 @@ int main() {
         adj[u].push_back(v);
     }
 
+    vector<int> ans = dfs(adj);
+    for(auto it:ans) {
+        cout << it << " ";
+    } cout << endl;
+
     auto end = high_resolution_clock::now();
     cout << "Time taken: "
          << duration_cast<milliseconds>(end - start).count()
@@ -49,3 +54,13 @@ int main() {
 
     return 0;
 }
+
+/*
+5 6
+1 2
+1 3
+2 4
+3 4 
+3 5 
+4 5
+*/
