@@ -1,55 +1,51 @@
 #include <bits/stdc++.h>
-#include <chrono>
 using namespace std;
-using namespace chrono;
 
-void dfs(string endWord, map<string,bool> hash, vector<string> temp, vector<vector<string>> &ans) {
-    if(temp.back() == endWord) {
-        ans.push_back(temp);
-        return;
-    }
-
-    string word = temp.back();
-    for (int i = 0; i < word.size(); i++) {
-        char original = word[i];
-
-        for (char ch = 'a'; ch <= 'z'; ch++) {
-            if (ch == original) continue;
-            word[i] = ch;
-
-            if (hash.count(word)) {
-                temp.push_back(word);
-                hash.erase(word);
-
-                dfs(endWord, hash, temp, ans);
-                temp.pop_back();
-            }
-        }
-
-        word[i] = original;
-    }
-}
 
 vector<vector<string>> findLadders(string beginWord, string endWord, vector<string>& wordList) {
-    // create a map
-    map<string,bool> hash;
-    for(auto i:wordList) {
-        hash[i]=true;
-    }
-
-    // prepare for dfs calls
+    unordered_set<string> hash(wordList.begin(), wordList.end());
     vector<vector<string>> ans;
-    vector<string> temp;
-    temp.push_back(beginWord);
-    
-    dfs(endWord, hash, temp, ans);
+    if (!hash.count(endWord)) return ans;
 
+    queue<vector<string>> q;
+    q.push({beginWord});
+    hash.erase(beginWord);
+    bool found = false;
+
+    while (!q.empty() && !found) {
+        unordered_set<string> usedThisLevel;
+        int levelSize = q.size();
+
+        for (int i = 0; i < levelSize; i++) {
+            vector<string> path = q.front(); q.pop();
+            string last = path.back();
+
+            for (int j = 0; j < last.size(); j++) {
+                string temp = last;
+                for (char ch = 'a'; ch <= 'z'; ch++) {
+                    temp[j] = ch;
+                    if (hash.count(temp)) {
+                        vector<string> newPath = path;
+                        newPath.push_back(temp);
+                        if (temp == endWord) {
+                            ans.push_back(newPath);
+                            found = true;
+                        } else {
+                            q.push(newPath);
+                        }
+                        usedThisLevel.insert(temp);
+                    }
+                }
+            }
+        }
+        // erase only after the whole level is processed
+        for (auto& w : usedThisLevel) hash.erase(w);
+    }
     return ans;
 }
 
 
 int main() {
-    auto start = high_resolution_clock::now();
 
     string st = "hit";
     string end = "cog";
